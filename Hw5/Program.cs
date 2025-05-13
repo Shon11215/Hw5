@@ -8,6 +8,7 @@ namespace Hw5
 {
     internal class Program
     {
+
         static void Main(string[] args) {
             User[] users = new User[]{
              new User("123456789", "user1@example.com", "Pass123", "John",

@@ -10,19 +10,35 @@ namespace Hw5
     {
 
         static void Main(string[] args) {
-            User[] users = new User[]{
-             new User("123456789", "user1@example.com", "Pass123", "John",
-             "Doe", "Johnny", "123-456-7890", new DateTime(1990, 5, 12)),
 
-             new User("987654321", "user2@example.com", "Secure456", "Jane",
-             "Smith", "Janie", "987-654-3210", new DateTime(1985, 8, 25)),
+            User[] basicUsers = new User[]
+            {
+                new User("123456789", "David", "Levi", "Dave", "050-1234567", new DateTime(1995, 4, 23)),
+                new User("987654321", "Sara", "Cohen", "Sari", "052-7654321", new DateTime(1998, 9, 15))
+            };
 
-             new User("951753852", "user3@example.com", "Strong789", "Alex",
-             "Brown", "Al", "555-666-7777", new DateTime(1998, 12, 3))};
+            // מערך משתמשים רשומים
+            RegisteredUser[] registeredUserAccounts = new RegisteredUser[]
+            {
+                new RegisteredUser("456123789", "michael@example.com","MikeSecure1", "Michael", "Rosen", "Mike", "054-9876543", new DateTime(2000, 1, 5)),
+                new RegisteredUser("321789654", "rachel@example.com", "RachG1234","Rachel", "Gold", "Rachi", "053-5678910", new DateTime(1993, 7, 10))
+            };
+
+            // מערך משתמשים עסקיים
+            BusinessUser[] businessClients = new BusinessUser[]
+            {
+                new BusinessUser("112233445", "fashionguru@example.com","FashionPass!", "Eli", "Adams", "EliA", "050-8765432", new DateTime(1987, 12, 1),"https://instagram.com/eliadams"),
+                new BusinessUser("556677889", "trendsetter@example.com","Trend1234", "Noa", "Shalev", "NoaS", "052-3344556", new DateTime(1992, 6, 21),"https://instagram.com/noastyle")
+            };
+
+
+
+
 
             ClothingItem[] clothes = new ClothingItem[0];
+
             int item_index = 0, item_counter = 0;
-            string index = null, user_id = Login(users);
+            string index = null, user_id = "temp";//Login(users);
 
             do {
                 Console.WriteLine("Hey what do you want to do?\n\na - Add a new Clothing Item\nb - See all your wardrobe\nc - Exit\n");
@@ -54,22 +70,22 @@ namespace Hw5
 
             } while (index.ToLower() != "c");
         }
-        static string Login(User[] users) {
-            while (true) {
-                Console.Write("Please enter your email: ");
-                string email = Console.ReadLine();
-                Console.Write("Enter your password: ");
-                string password = Console.ReadLine();
+        //static string Login(User[] users) {
+        //    while (true) {
+        //        Console.Write("Please enter your email: ");
+        //        string email = Console.ReadLine();
+        //        Console.Write("Enter your password: ");
+        //        string password = Console.ReadLine();
 
-                for (int i = 0; i < users.Length; i++) {
-                    if (users[i].Email == email && users[i].Password == password) {
-                        Console.WriteLine($"Welcome {users[i].FirstName}");
-                        return users[i].UserId;
-                    }
-                }
-                Console.WriteLine("Incorrect Username or Password, Please enter again\n");
-            }
-        }
+        //        for (int i = 0; i < users.Length; i++) {
+        //            if (users[i].Email == email && users[i].Password == password) {
+        //                Console.WriteLine($"Welcome {users[i].FirstName}");
+        //                return users[i].UserId;
+        //            }
+        //        }
+        //        Console.WriteLine("Incorrect Username or Password, Please enter again\n");
+        //    }
+        //}
         static ClothingItem initCloathingItem() {
             string[] season_list = new string[4] { "summer", "spring", "winter", "fall" };
             int season_counter;

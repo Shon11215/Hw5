@@ -17,6 +17,7 @@ namespace Hw5
     }
     internal class ClothingItem
     {
+
         Usage usage;
         Sizes _size;
         int cost;
@@ -26,15 +27,12 @@ namespace Hw5
         bool is_favorite, is_casual;
         static uint _idCounter = 1000;
 
-        public ClothingItem(string user_id, string color, string name, string[] seasson, string is_favorite, int usage, string type, string brand, int cost, int _size, string is_casual) : this(name, is_casual) {
+        public ClothingItem(string user_id,  string name, string is_favorite, string type, string brand, string is_casual) : this(name, is_casual)
+        {
             Uint = IdCounter++;
             this.user_id = user_id;
-            this.Cost = cost;
-            this.Usage = (Usage)usage;
-            this.Color = color;
-            this.Size = (Sizes)_size;
-            this.seasons = seasson;
-            if (is_favorite.ToLower() == "yes" || is_favorite.ToLower() == "true" || is_favorite == "1") {
+            if (is_favorite.ToLower() == "yes" || is_favorite.ToLower() == "true" || is_favorite == "1")
+            {
                 this.is_favorite = true;
             }
             //this.name = name;
@@ -45,11 +43,13 @@ namespace Hw5
         }
 
         public ClothingItem() { }
-        public ClothingItem(string name, string is_casual) {
+        public ClothingItem(string name, string is_casual)
+        {
             this.name = name;
             SetIsCasual(is_casual);
         }
-        public void Print() {
+        public void Print()
+        {
             Console.WriteLine("╔══════════════════════════════════════╗");
             Console.WriteLine($"║     Clothing Item Details ({this.name})       ║");
             Console.WriteLine("╚══════════════════════════════════════╝");
@@ -83,56 +83,83 @@ namespace Hw5
             get => color;
             set
             {
-                if (value[0] != '#' || value.Length != 7 || !IsValidColor((string)value)) {
-                   throw new ArgumentException("Invalid Color");
+                if (value[0] != '#' || value.Length != 7 || !IsValidColor((string)value))
+                {
+                    throw new ArgumentException("Invalid Color");
                 }
-                else {
+                else
+                {
                     color = value;
                 }
             }
         }
-    
 
-    internal Usage Usage
-    {
-        get => usage;
-        set
+
+        internal Usage Usage
         {
-            int num_value = (int)value;
-            if (num_value < 1 || num_value > 3)
-                throw new FormatException("Usage value needs to be between 1 and 3.");
-            usage = (Usage)value;
+            get => usage;
+            set
+            {
+                int num_value = (int)value;
+                if (num_value < 1 || num_value > 3)
+                    throw new FormatException("Usage value needs to be between 1 and 3.");
+                usage = (Usage)value;
+            }
         }
+
+        internal Sizes Size
+        {
+            get => _size;
+            set =>  _size = value;
+        }
+        public string User_id
+        {
+            get => user_id;
+            set => user_id = value;
+        }
+        public static uint IdCounter { get => _idCounter; set => _idCounter = value; }
+        public uint Uint { get => _uint; set => _uint = value; }
+
+        static bool IsValidColor(string color)
+        {
+            for (int i = 1; i < color.Length; i++)
+            {
+                if (!char.IsDigit(color[i]) && (color[i] < 'a' || color[i] > 'f') && (color[i] < 'A' || color[i] > 'F'))
+                    return false;
+            }
+            return true;
+        }
+        public void SetIsCasual(string is_casual)
+        {
+            if (is_casual.ToLower() == "yes" || is_casual.ToLower() == "true" || is_casual == "1")
+            {
+                this.is_casual = true;
+            }
+        }
+        public bool GetIsCasual()
+        {
+            return is_casual;
+        }
+        public void SetSeassons(int[] season_num)
+        {
+            string[] seasons = new string[] { "summer", "spring", "fall", "winter" };
+            if (season_num.Length < 1 & season_num.Length > 4)
+                throw new ArgumentException("seassons should be filled up to 4 seassons at most or 1 at least");
+            string[] selected = new string[season_num.Length];
+            for (int i = 0; i < season_num.Length; i++)
+            {
+                if (season_num[i] < 1 || season_num[i] > 4)
+                    throw new ArgumentException("seassons are repsented in numbers between 1 and 4");
+                for (int j = 0; j < i; j++)
+                {
+                    if (season_num[i] == season_num[j])
+                        throw new ArgumentException("only one seasson need to be repsented or else no kabab");
+                }
+                selected[i] = seasons[season_num[i] - 1];
+            }
+            this.seasons = selected;
+        }
+       
     }
 
-    internal Sizes Size
-    {
-        get => _size;
-        set => _size = value;
-    }
-    public string User_id
-    {
-        get => user_id;
-        set => user_id = value;
-    }
-    public static uint IdCounter { get => _idCounter; set => _idCounter = value; }
-    public uint Uint { get => _uint; set => _uint = value; }
-
-    static bool IsValidColor(string color) {
-        for (int i = 1; i < color.Length; i++) {
-            if (!char.IsDigit(color[i]) && (color[i] < 'a' || color[i] > 'f') && (color[i] < 'A' || color[i] > 'F'))
-                return false;
-        }
-        return true;
-    }
-    public void SetIsCasual(string is_casual) {
-        if (is_casual.ToLower() == "yes" || is_casual.ToLower() == "true" || is_casual == "1") {
-            this.is_casual = true;
-        }
-    }
-    public bool GetIsCasual() {
-        return is_casual;
-    }
-
-}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,7 +10,8 @@ namespace Hw5
     internal class Program
     {
 
-        static void Main(string[] args) {
+        static void Main(string[] args)
+        {
 
             User[] basicUsers = new User[]
             {
@@ -40,24 +42,29 @@ namespace Hw5
             int item_index = 0, item_counter = 0;
             string index = null, user_id = "temp";//Login(users);
 
-            do {
+            do
+            {
                 Console.WriteLine("Hey what do you want to do?\n\na - Add a new Clothing Item\nb - See all your wardrobe\nc - Exit\n");
                 Console.Write("Please enter your pick: ");
                 index = Console.ReadLine();
 
-                switch (index.ToLower()) {
+                switch (index.ToLower())
+                {
                     case "a":
                         Array.Resize(ref clothes, item_index + 1);
                         clothes[item_index++] = initCloathingItem();
                         break;
                     case "b":
-                        for (int i = 0; i < item_index; i++) {
-                            if (user_id == clothes[i].User_id) {
+                        for (int i = 0; i < item_index; i++)
+                        {
+                            if (user_id == clothes[i].User_id)
+                            {
                                 clothes[i].Print();
                                 item_counter++;
                             }
                         }
-                        if (item_counter == 0) {
+                        if (item_counter == 0)
+                        {
                             Console.WriteLine("The user does not have items.. please enter items to the closet :)\n");
                         }
                         break;
@@ -86,46 +93,15 @@ namespace Hw5
         //        Console.WriteLine("Incorrect Username or Password, Please enter again\n");
         //    }
         //}
-        static ClothingItem initCloathingItem() {
-            string[] season_list = new string[4] { "summer", "spring", "winter", "fall" };
-            int season_counter;
+        static ClothingItem initCloathingItem()
+        {
+
             Console.Write("\nPlease enter the user ID: ");
             string user_id = Console.ReadLine();
 
             Console.Write("Please enter the name of the item: ");
             string name = Console.ReadLine();
-
-            Console.Write("\nPlease enter the color code of the item: ");
-            string color = Console.ReadLine();
-
-            Console.Write("\n1) none\n2) average\n3) high\nPlease enter the amout of usage the item has: ");
-            int usage_status = int.Parse(Console.ReadLine());
-
-            Console.Write("\nPlease enter the cost of the item: ");
-            int cost = int.Parse(Console.ReadLine());
-
-            //Checking amount of seasons
-            do {
-                Console.Write("\nPlease enter the amount of seasons your item fits between 1-4: ");
-                season_counter = int.Parse(Console.ReadLine());
-            } while (season_counter < 1 || season_counter > 4);
-
-            string[] seasons_to_pass = new string[season_counter];
-            int[] season_index = new int[season_counter];
-
-            Console.Write("\n1) summer\n2) spring\n3) winter\n4) fall\nPlease enter the number for the following seassons this cloathing is attenable for:");
-            //We check if the entered inputs for the seasons alredy exists if it does we enter again if not we enter to the array
-            for (int i = 0; i < season_counter; i++) {
-                int curr_season = int.Parse(Console.ReadLine());
-                if (season_index.Contains(curr_season)) {
-                    Console.WriteLine($"{season_list[curr_season - 1]} Is already in please enter a diff season");
-                    i--;
-                    continue;
-                }
-                season_index[i] = curr_season;
-                seasons_to_pass[i] = season_list[curr_season - 1];
-            }
-
+           
             Console.Write("\nPlease enter Yes/no for wether the item is favorite or not: ");
             string is_favorite = (Console.ReadLine());
 
@@ -138,10 +114,82 @@ namespace Hw5
             Console.Write("\nIs the item Casual? yes/no: ");
             string is_casual = (Console.ReadLine());
 
-            Console.Write("\nPlease enter the size (S,M,L,etc..): ");
-            int size = int.Parse((Console.ReadLine()));
+            ClothingItem item = new ClothingItem(user_id, name, is_favorite, type,brand,is_casual);
 
-            ClothingItem item = new ClothingItem(user_id, color, name, seasons_to_pass, is_favorite, usage_status, type, brand, cost, size, is_casual);
+            while (true)
+            {
+                try
+                {
+                    Console.Write("\nPlease enter the color code of the item: ");
+                    item.Color = Console.ReadLine();
+                    break;
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine($"{ex.Message}");
+                }
+            }
+            while (true)
+            {
+                try
+                {
+                    Console.Write("\n1) none\n2) average\n3) high\nPlease enter the amout of usage the item has: ");
+                    item.Usage = (Usage)int.Parse(Console.ReadLine());
+                    break;
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine($"{ex.Message}");
+                }
+            }
+            while (true)
+            {
+                try
+                {
+                    Console.Write("\nPlease enter the cost of the item: ");
+                    item.Cost = int.Parse(Console.ReadLine());
+                    break;
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine($"{ex.Message}");
+                }
+            }
+            while (true)
+            {
+                try
+                {
+                    Console.WriteLine("please enter seassons you wish to associate it to\n");
+                    Console.WriteLine("1) Summer ,2)Spring, 3)Fall , 4)Winter\n");
+                    Console.WriteLine("Enter from 1 up untill 4 numbers with spaces inbetween\n");
+                    string[] num_to_seasson = (Console.ReadLine()).Split(' ');
+                    int[] seasons_to_pass = new int[num_to_seasson.Length];
+                    for (int i = 0; i < num_to_seasson.Length; i++)
+                    {
+                        seasons_to_pass[i] = int.Parse(num_to_seasson[i]);
+                    }
+                    item.SetSeassons(seasons_to_pass);
+                    break;
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine($"{ex.Message}");
+                }
+            }
+            while (true)
+            {
+                try
+                {
+                    Console.Write("\nPlease enter the size (S,M,L,etc..): ");
+                    item.Size = (Sizes)int.Parse((Console.ReadLine()));
+                    break;
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine($"{ex.Message}");
+                }
+            }
+
             return item;
         }
     }

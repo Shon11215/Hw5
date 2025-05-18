@@ -42,10 +42,11 @@ namespace Hw5
         }
         public ClothingAd(uint itemId, string userId, string pickupAddress) {
             AdID = count++;
-            CreationDate = DateTime.Now;// תאריךהיצירהיהיהתאריךנוכחי
+            CreationDate = DateTime.Now;// ת
             PickupAddress = pickupAddress;
             AdStatus = false;
             ItemID = itemId;
+            this.userId = userId;
         }
         public void PrintAdDetails() {
             Console.WriteLine($"Ad ID: {adId}");

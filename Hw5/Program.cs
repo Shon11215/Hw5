@@ -1,9 +1,12 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Hw5
 {
@@ -12,6 +15,7 @@ namespace Hw5
 
         static void Main(string[] args)
         {
+
 
             User[] basicUsers = new User[]
             {
@@ -33,14 +37,19 @@ namespace Hw5
                 new BusinessUser("556677889", "trendsetter@example.com","Trend1234", "Noa", "Shalev", "NoaS", "052-3344556", new DateTime(1992, 6, 21),"https://instagram.com/noastyle")
             };
 
+            basicUsers[0].AddItem( UserClothingItem(basicUsers[0].UserId));
+            basicUsers[0].AddItem( UserClothingItem(basicUsers[0].UserId));
+            registeredUserAccounts[0].AddItem( UserClothingItem(registeredUserAccounts[0].UserId));
+            registeredUserAccounts[0].AddItem( UserClothingItem(registeredUserAccounts[0].UserId));
+            registeredUserAccounts[0].Adding(delivery("456123789", registeredUserAccounts[0].item[0].Uint));
+            registeredUserAccounts[0].Adding(delivery("456123789", registeredUserAccounts[0].item[1].Uint));
+            businessClients[0].AddItem(UserClothingItem(businessClients[0].UserId));
+            businessClients[0].AddItem(UserClothingItem(businessClients[0].UserId));
+            businessClients[0].Adding(NewPop("112233445"));
 
 
-
-
-            ClothingItem[] clothes = new ClothingItem[0];
-
-            int item_index = 0, item_counter = 0;
-            string index = null, user_id = "temp";//Login(users);
+            int item_index = 0;
+            string index = null, user_id = "temp";
 
             do
             {
@@ -51,22 +60,21 @@ namespace Hw5
                 switch (index.ToLower())
                 {
                     case "a":
-                        Array.Resize(ref clothes, item_index + 1);
-                        clothes[item_index++] = initCloathingItem();
+                        foreach (User user in basicUsers)
+                        {
+                            user.Print();
+                        }
+                        foreach (RegisteredUser user in registeredUserAccounts)
+                        {
+                            user.Print();
+                        }
+                        foreach (BusinessUser user in businessClients)
+                        {
+                            user.Print();
+                        }
                         break;
                     case "b":
-                        for (int i = 0; i < item_index; i++)
-                        {
-                            if (user_id == clothes[i].User_id)
-                            {
-                                clothes[i].Print();
-                                item_counter++;
-                            }
-                        }
-                        if (item_counter == 0)
-                        {
-                            Console.WriteLine("The user does not have items.. please enter items to the closet :)\n");
-                        }
+                        
                         break;
                     case "c":
                         break;
@@ -77,31 +85,48 @@ namespace Hw5
 
             } while (index.ToLower() != "c");
         }
-        //static string Login(User[] users) {
-        //    while (true) {
-        //        Console.Write("Please enter your email: ");
-        //        string email = Console.ReadLine();
-        //        Console.Write("Enter your password: ");
-        //        string password = Console.ReadLine();
 
-        //        for (int i = 0; i < users.Length; i++) {
-        //            if (users[i].Email == email && users[i].Password == password) {
-        //                Console.WriteLine($"Welcome {users[i].FirstName}");
-        //                return users[i].UserId;
-        //            }
-        //        }
-        //        Console.WriteLine("Incorrect Username or Password, Please enter again\n");
-        //    }
-        //}
-        static ClothingItem initCloathingItem()
+        static ClothingItem UserClothingItem(string user_id)
+        {
+            ClothingItem item = new ClothingItem(user_id, "shon", "yes", "Shirt", "Gucci", "no");
+            item.Color = "#123123";
+            item.Size = (Sizes)1;
+            item.Usage = (Usage)1;
+            item.Cost = 140;
+            item.SetSeassons(new int[] { 1, 2 });
+            return item;
+
+        }
+
+        static ClothingAd delivery(string user_id, uint _uint)
+        {
+            Console.WriteLine("please enter the adress u wish to deliver to");
+            ClothingAd ad = new ClothingAd(_uint, user_id, Console.ReadLine());
+            Console.WriteLine("Your item was delivered!");
+            return ad;
+        }
+        static PopupEvent NewPop(string user_id)
+        {
+            Console.Write("please enter a name for the event: ");
+            string name = Console.ReadLine();
+            Console.Write("please enter the adrees of the event: ");
+            string adress = Console.ReadLine();
+            Console.Write("Enter start time (e.g., dd/MM/yyyy): ");
+            DateTime start_event = DateTime.Parse(Console.ReadLine());
+            Console.WriteLine("Enter end time (e.g., dd/mm/yyyy): ");
+            DateTime end_event = DateTime.Parse(Console.ReadLine());
+            PopupEvent po = new PopupEvent(user_id, name, adress, start_event, end_event);
+            return po;
+        }
+
+
+        static ClothingItem initCloathingItem(string user_id)
         {
 
-            Console.Write("\nPlease enter the user ID: ");
-            string user_id = Console.ReadLine();
 
             Console.Write("Please enter the name of the item: ");
             string name = Console.ReadLine();
-           
+
             Console.Write("\nPlease enter Yes/no for wether the item is favorite or not: ");
             string is_favorite = (Console.ReadLine());
 
@@ -114,7 +139,7 @@ namespace Hw5
             Console.Write("\nIs the item Casual? yes/no: ");
             string is_casual = (Console.ReadLine());
 
-            ClothingItem item = new ClothingItem(user_id, name, is_favorite, type,brand,is_casual);
+            ClothingItem item = new ClothingItem(user_id, name, is_favorite, type, brand, is_casual);
 
             while (true)
             {

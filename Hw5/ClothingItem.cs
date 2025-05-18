@@ -35,11 +35,8 @@ namespace Hw5
             {
                 this.is_favorite = true;
             }
-            //this.name = name;
             this.brand = brand;
             this.type = type;
-            //SetIsCasual(is_casual);
-
         }
 
         public ClothingItem() { }
@@ -110,7 +107,14 @@ namespace Hw5
         internal Sizes Size
         {
             get => _size;
-            set =>  _size = value;
+            set
+            {
+                if ((int)value < 1 || (int)value > 6)
+                {
+                    throw new FormatException("Size value has to be between 1 and 6");
+                }
+                _size = value;
+            }
         }
         public string User_id
         {

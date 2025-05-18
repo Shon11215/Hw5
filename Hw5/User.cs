@@ -11,7 +11,7 @@ namespace Hw5
     {
         string userId, firstName, lastName, nickName, phoneNumber;
         DateTime birthDate;
-        ClothingItem[] item = new ClothingItem[0];
+        public ClothingItem[] item = new ClothingItem[0];
 
         public User() { }
         public User(string userId, string firstName, string lastName, string nickName,
@@ -33,7 +33,7 @@ namespace Hw5
         }
         public void Print() {
             Console.WriteLine($"Details User {firstName} {lastName} -{userId}:");
-            Console.WriteLine($"nickName: {nickName}\nPhone: {phoneNumber}\nbirth date: {birthDate}");
+            Console.WriteLine($"nickName: {nickName}\nPhone: {phoneNumber}\nbirth date: {birthDate}\n");
             if (item == null) {
                 Console.WriteLine($"{userId} has no items in the cloathset yet.\n");
                 return;

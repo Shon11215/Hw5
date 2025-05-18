@@ -10,7 +10,7 @@ namespace Hw5
     internal class RegisteredUser : User
     {
         string email, password;
-        ClothingAd[] ad = new ClothingAd[0];
+        public ClothingAd[] ad = new ClothingAd[0];
 
         public RegisteredUser() { }
 
@@ -39,7 +39,7 @@ namespace Hw5
         public new void Print() {
             base.Print();
             if (ad == null) {
-                Console.WriteLine($"{UserId} has no items in the cloathset yet.\n");
+                Console.WriteLine($"{UserId} has no items in the cloathset yet.\n\n");
                 return;
             }
             foreach (ClothingAd ad in this.ad) {

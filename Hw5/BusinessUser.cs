@@ -31,7 +31,8 @@ namespace Hw5
         }
         public new void Print() {
             base.Print();
-            Console.WriteLine(instgram_link);
+            PrintPop();
+            Console.WriteLine(instgram_link+"\n");
         }
 
     }

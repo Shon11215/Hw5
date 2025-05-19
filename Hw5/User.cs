@@ -32,7 +32,7 @@ namespace Hw5
             this.item[this.item.Length - 1] = item;
         }
         public void Print() {
-            Console.WriteLine($"Details User {firstName} {lastName} -{userId}:");
+            Console.WriteLine($"Details User {firstName} {lastName} - {userId}:");
             Console.WriteLine($"nickName: {nickName}\nPhone: {phoneNumber}\nbirth date: {birthDate}\n");
             if (item == null) {
                 Console.WriteLine($"{userId} has no items in the cloathset yet.\n");

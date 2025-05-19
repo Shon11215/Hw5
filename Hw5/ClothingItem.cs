@@ -42,17 +42,17 @@ namespace Hw5
         public ClothingItem() { }
         public ClothingItem(string name, string is_casual)
         {
-            this.name = name;
+            this.Name = name;
             SetIsCasual(is_casual);
         }
         public void Print()
         {
             Console.WriteLine("╔══════════════════════════════════════╗");
-            Console.WriteLine($"║     Clothing Item Details ({this.name})       ║");
+            Console.WriteLine($"║     Clothing Item Details ({this.Name})       ║");
             Console.WriteLine("╚══════════════════════════════════════╝");
             Console.WriteLine($"• User ID:         {this.user_id}");
             Console.WriteLine($"• Item ID:         {this.Uint}");
-            Console.WriteLine($"• Name:            {this.name}");
+            Console.WriteLine($"• Name:            {this.Name}");
             Console.WriteLine($"• Color:           {this.Color}");
             Console.WriteLine($"• Favorite:        {(this.is_favorite ? "Yes" : "No")}");
             Console.WriteLine($"• Usage:           {this.Usage}");
@@ -123,6 +123,7 @@ namespace Hw5
         }
         public static uint IdCounter { get => _idCounter; set => _idCounter = value; }
         public uint Uint { get => _uint; set => _uint = value; }
+        public string Name { get => name; set => name = value; }
 
         static bool IsValidColor(string color)
         {

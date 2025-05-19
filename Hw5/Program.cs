@@ -23,78 +23,202 @@ namespace Hw5
                 new User("987654321", "Sara", "Cohen", "Sari", "052-7654321", new DateTime(1998, 9, 15))
             };
 
-            // מערך משתמשים רשומים
             RegisteredUser[] registeredUserAccounts = new RegisteredUser[]
             {
                 new RegisteredUser("456123789", "michael@example.com","MikeSecure1", "Michael", "Rosen", "Mike", "054-9876543", new DateTime(2000, 1, 5)),
                 new RegisteredUser("321789654", "rachel@example.com", "RachG1234","Rachel", "Gold", "Rachi", "053-5678910", new DateTime(1993, 7, 10))
             };
 
-            // מערך משתמשים עסקיים
             BusinessUser[] businessClients = new BusinessUser[]
             {
                 new BusinessUser("112233445", "fashionguru@example.com","FashionPass!", "Eli", "Adams", "EliA", "050-8765432", new DateTime(1987, 12, 1),"https://instagram.com/eliadams"),
                 new BusinessUser("556677889", "trendsetter@example.com","Trend1234", "Noa", "Shalev", "NoaS", "052-3344556", new DateTime(1992, 6, 21),"https://instagram.com/noastyle")
             };
 
-            basicUsers[0].AddItem( UserClothingItem(basicUsers[0].UserId));
-            basicUsers[0].AddItem( UserClothingItem(basicUsers[0].UserId));
-            registeredUserAccounts[0].AddItem( UserClothingItem(registeredUserAccounts[0].UserId));
-            registeredUserAccounts[0].AddItem( UserClothingItem(registeredUserAccounts[0].UserId));
-            registeredUserAccounts[0].Adding(delivery("456123789", registeredUserAccounts[0].item[0].Uint));
-            registeredUserAccounts[0].Adding(delivery("456123789", registeredUserAccounts[0].item[1].Uint));
-            businessClients[0].AddItem(UserClothingItem(businessClients[0].UserId));
-            businessClients[0].AddItem(UserClothingItem(businessClients[0].UserId));
-            businessClients[0].Adding(NewPop("112233445"));
-
-
-            int item_index = 0;
-            string index = null, user_id = "temp";
+            string index = null;
 
             do
             {
-                Console.WriteLine("Hey what do you want to do?\n\na - Add a new Clothing Item\nb - See all your wardrobe\nc - Exit\n");
+                Console.WriteLine("Hey what do you want to do?\n\na - Add a new Clothing Item For a Certin user" +
+                    "\nb - Add Popup or Clothingad\nc - Print all\nd - leave :)");
                 Console.Write("Please enter your pick: ");
                 index = Console.ReadLine();
 
                 switch (index.ToLower())
                 {
                     case "a":
-                        foreach (User user in basicUsers)
-                        {
-                            user.Print();
-                        }
-                        foreach (RegisteredUser user in registeredUserAccounts)
-                        {
-                            user.Print();
-                        }
-                        foreach (BusinessUser user in businessClients)
-                        {
-                            user.Print();
-                        }
+                        AddItemToAccount(basicUsers, registeredUserAccounts, businessClients);
                         break;
+
                     case "b":
-                        
+                        HandleAdOrPopup(registeredUserAccounts, businessClients);
                         break;
+
                     case "c":
+                        PrintAllUsers(basicUsers, registeredUserAccounts, businessClients);
                         break;
 
                     default:
                         break;
                 }
 
-            } while (index.ToLower() != "c");
+
+
+            } while (index.ToLower() != "d");
         }
 
-        static ClothingItem UserClothingItem(string user_id)
+        private static void PrintAllUsers(User[] basicUsers, RegisteredUser[] registeredUserAccounts, BusinessUser[] businessClients)
         {
-            ClothingItem item = new ClothingItem(user_id, "shon", "yes", "Shirt", "Gucci", "no");
-            item.Color = "#123123";
-            item.Size = (Sizes)1;
-            item.Usage = (Usage)1;
-            item.Cost = 140;
-            item.SetSeassons(new int[] { 1, 2 });
-            return item;
+            Console.Clear();
+            foreach (User user in basicUsers)
+                user.Print();
+            foreach (RegisteredUser user in registeredUserAccounts)
+                user.Print();
+            foreach (BusinessUser user in businessClients)
+                user.Print();
+        }
+
+        private static void HandleAdOrPopup(RegisteredUser[] registeredUserAccounts, BusinessUser[] businessClients)
+        {
+            Console.Clear();
+            Console.WriteLine("Choose action:");
+            Console.WriteLine("1 - Add popup event (BusinessUser)");
+            Console.WriteLine("2 - Add clothing ad (RegisteredUser)");
+            string subAction = Console.ReadLine();
+
+            if (subAction == "1")
+            {
+                foreach (BusinessUser busUser in businessClients)
+                    Console.WriteLine($"{busUser.FirstName} {busUser.LastName} - {busUser.UserId}");
+
+                Console.Write("Enter user ID: ");
+                string id = Console.ReadLine();
+                bool found = false;
+                for (int i = 0; i < businessClients.Length; i++)
+                {
+                    if (businessClients[i].UserId == id)
+                    {
+                        businessClients[i].Adding(NewPop(businessClients[i].UserId));
+                        Console.WriteLine("Popup event added successfully!");
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                    Console.WriteLine("User ID not found in business accounts.");
+            }
+            else if (subAction == "2")
+            {
+                foreach (RegisteredUser regUser in registeredUserAccounts)
+                    Console.WriteLine($"{regUser.FirstName} {regUser.LastName} - {regUser.UserId}");
+
+                Console.Write("Enter user ID: ");
+                string id = Console.ReadLine();
+                bool found = false;
+                for (int i = 0; i < registeredUserAccounts.Length; i++)
+                {
+                    if (registeredUserAccounts[i].UserId == id)
+                    {
+                        RegisteredUser selectedUser = registeredUserAccounts[i];
+                        found = true;
+
+                        if (selectedUser.item.Length == 0)
+                        {
+                            Console.WriteLine("This user has no clothing items to create an ad for.");
+                            break;
+                        }
+
+                        for (int j = 0; j < selectedUser.item.Length; j++)
+                            Console.WriteLine($"{j + 1} - {selectedUser.item[j].Uint}: {selectedUser.item[j].Name}");
+
+                        Console.Write("Choose item index: ");
+                        int indexItem = int.Parse(Console.ReadLine());
+                        if (indexItem >= 1 && indexItem <= selectedUser.item.Length)
+                        {
+                            selectedUser.Adding(delivery(selectedUser.UserId, selectedUser.item[indexItem - 1].Uint));
+                            Console.WriteLine("Clothing ad created successfully!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid item index.");
+                        }
+                        break;
+                    }
+                }
+
+                if (!found)
+                    Console.WriteLine("User ID not found in registered accounts.");
+            }
+            else
+            {
+                Console.WriteLine("Invalid action selected.");
+            }
+        }
+
+
+        private static void AddItemToAccount(User[] basicUsers, RegisteredUser[] registeredUserAccounts, BusinessUser[] businessClients)
+        {
+            Console.Clear();
+            Console.WriteLine("Select user type:");
+            Console.WriteLine("1 - Basic User");
+            Console.WriteLine("2 - Registered User");
+            Console.WriteLine("3 - Business User");
+            string userTypeChoice = Console.ReadLine();
+            bool is_found = false;
+            if (userTypeChoice == "1")
+            {
+                foreach (User basicUser in basicUsers)
+                    Console.WriteLine($"{basicUser.FirstName} {basicUser.LastName} - {basicUser.UserId}");
+
+                Console.Write("Enter user ID: ");
+                string userId = Console.ReadLine();
+                for (int i = 0; i < basicUsers.Length; i++)
+                {
+                    if (basicUsers[i].UserId == userId)
+                    {
+                        basicUsers[i].AddItem(initCloathingItem(basicUsers[i].UserId));
+                        is_found = true;
+                        break;
+                    }
+                }
+            }
+            else if (userTypeChoice == "2")
+            {
+                foreach (RegisteredUser regUser in registeredUserAccounts)
+                    Console.WriteLine($"{regUser.FirstName} {regUser.LastName} - {regUser.UserId}");
+
+                Console.Write("Enter user ID: ");
+                string userId = Console.ReadLine();
+                for (int i = 0; i < registeredUserAccounts.Length; i++)
+                {
+                    if (registeredUserAccounts[i].UserId == userId)
+                    {
+                        registeredUserAccounts[i].AddItem(initCloathingItem(registeredUserAccounts[i].UserId));
+                        is_found = true;
+                        break;
+                    }
+                }
+            }
+            else if (userTypeChoice == "3")
+            {
+                foreach (BusinessUser busUser in businessClients)
+                    Console.WriteLine($"{busUser.FirstName} {busUser.LastName} - {busUser.UserId}");
+
+                Console.Write("Enter user ID: ");
+                string userId = Console.ReadLine();
+                for (int i = 0; i < businessClients.Length; i++)
+                {
+                    if (businessClients[i].UserId == userId)
+                    {
+                        businessClients[i].AddItem(initCloathingItem(businessClients[i].UserId));
+                        is_found = true;
+                        break;
+                    }
+                }
+            }
+            if (!is_found)
+                Console.WriteLine("invalid user ID\n");
 
         }
 
@@ -218,4 +342,7 @@ namespace Hw5
             return item;
         }
     }
+
+
+
 }
